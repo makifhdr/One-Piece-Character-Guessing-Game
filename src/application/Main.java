@@ -82,7 +82,7 @@ public class Main extends Application {
         root.setPadding(new Insets(10));
 
         TextField inputField = new TextField();
-        inputField.setPromptText("Karakter adı gir...");
+        inputField.setPromptText("Enter character name...");
         
         // Suggestion list setup
         suggestionListView.setItems(FXCollections.observableArrayList());
