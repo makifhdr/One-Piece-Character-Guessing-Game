@@ -8,7 +8,8 @@ public class CharacterLoader {
     public static List<Character> loadCharactersFromCSV(String filePath) {
         List<Character> characters = new ArrayList<>();
 
-        try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
+        try (InputStream inputStream = CharacterLoader.class.getResourceAsStream(filePath);
+                BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))) {
             String line;
             reader.readLine(); // Skip header
 
