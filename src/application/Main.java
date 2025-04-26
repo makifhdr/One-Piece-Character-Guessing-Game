@@ -44,7 +44,7 @@ import javafx.scene.text.FontWeight;
 public class Main extends Application {
 	
 	private GridPane grid;
-	List<Character> list = CharacterLoader.loadCharactersFromCSV("data/characters.csv");;
+	List<Character> list = CharacterLoader.loadCharactersFromCSV("src/data/characters.csv");;
 	List<String> siralanmisArcList = new ArrayList<>();
 	private ObservableList<String> suggestions = FXCollections.observableArrayList();
     private ListView<String> suggestionListView = new ListView<>();
