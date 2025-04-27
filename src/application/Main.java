@@ -164,6 +164,7 @@ public class Main extends Application {
         
 		Scene scene = new Scene(root,1500,1000);
 		primaryStage.setScene(scene);
+		primaryStage.setMaximized(true);
 		primaryStage.show();
 	}
 	
@@ -220,6 +221,7 @@ public class Main extends Application {
 
 	    Scene winScene = new Scene(layout, 800, 600);
 	    winStage.setScene(winScene);
+	    winStage.setResizable(false);
 	    winStage.show();
 	}
 
@@ -228,6 +230,7 @@ public class Main extends Application {
 		siralanmisArcList.clear();
 		suggestions.clear();
 	    suggestionListView.getItems().clear();
+	    primaryStage.hide();
 	    start(primaryStage);
 	}
 	
