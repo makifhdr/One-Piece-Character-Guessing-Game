@@ -53,6 +53,7 @@ public class Main extends Application {
 	Image upArrow = new Image(getClass().getResource("/resources/up-arrow.png").toExternalForm());
 	Image downArrow = new Image(getClass().getResource("/resources/down-arrow.png").toExternalForm());
 	Image backgroundImage = new Image(getClass().getResource("/resources/one-piece-background2.jpg").toExternalForm());
+	Image menuBackGroundImage = new Image(getClass().getResource("/resources/one-piece-menu-background.jpg").toExternalForm());
 	
 	@Override
 	public void start(Stage primaryStage) {
@@ -83,10 +84,18 @@ public class Main extends Application {
         root.setPadding(new Insets(10));
 
         TextField inputField = new TextField();
+        inputField.setScaleX(3);
+        inputField.setScaleY(3);
+        inputField.setMaxWidth(200);
+        inputField.setTranslateY(40);
         inputField.setPromptText("Enter character name...");
         
         suggestionListView.setItems(FXCollections.observableArrayList());
+        suggestionListView.setScaleX(3);
+        suggestionListView.setScaleY(3);
+        suggestionListView.setTranslateY(-270);
         suggestionListView.setMaxHeight(200);
+        suggestionListView.setMaxWidth(200);
         suggestionListView.setVisible(false);
         
         inputField.textProperty().addListener((observable, oldValue, newValue) -> {
@@ -110,7 +119,8 @@ public class Main extends Application {
                 List<String> filtered = suggestions.stream()
                         .filter(name -> name.toLowerCase().contains(inputField.getText().toLowerCase()))
                         .collect(Collectors.toList());
-                suggestionListView.setItems(FXCollections.observableArrayList(filtered));                
+                suggestionListView.setItems(FXCollections.observableArrayList(filtered));
+                suggestionListView.setVisible(!filtered.isEmpty());
             }
         });
         
@@ -146,26 +156,70 @@ public class Main extends Application {
         
         ScrollPane scrollPane = new ScrollPane(grid);
         scrollPane.setFitToWidth(true);
-        VBox.setVgrow(scrollPane, Priority.ALWAYS);
         
         scrollPane.setStyle("-fx-background: transparent; -fx-background-color: transparent;");
         grid.setStyle("-fx-background-color: transparent;");
         
         Button exitButton = new Button("❌ Exit");
-        exitButton.setOnAction(e -> 
-	    	primaryStage.close());
+        exitButton.setOnAction(e -> primaryStage.close());
         exitButton.setStyle("-fx-font-size: 20px; -fx-background-color: lightcoral;");
+        exitButton.setScaleX(2);
+        exitButton.setScaleY(2);
+        exitButton.setTranslateX(250);
+        exitButton.setTranslateY(50);
         
-        HBox hbox = new HBox(9, inputField, vbox,exitButton);
+        HBox hbox = new HBox(9, vbox, exitButton);
         hbox.setAlignment(Pos.TOP_CENTER);
         
+        VBox.setVgrow(scrollPane, Priority.ALWAYS);
         root.setBackground(new Background(background1));
-        root.getChildren().addAll(hbox, grid, scrollPane);
-        
+        //root.getChildren().addAll(hbox, grid, scrollPane);
+        root.getChildren().add(scrollPane);
+        root.getChildren().add(hbox);
+        root.getChildren().add(grid);
+                
 		Scene scene = new Scene(root,1500,1000);
 		primaryStage.setScene(scene);
 		primaryStage.setMaximized(true);
-		primaryStage.show();
+		
+		Stage menuStage = new Stage();
+		
+	    Label menuLabel = new Label("    WELCOME TO ONE PIECE\nCHARACTER GUESSING GAME");
+	    menuLabel.setStyle("-fx-font-size: 40px; -fx-text-fill: white; -fx-effect: dropshadow(one-pass-box, black, 10, 0.0, 0, 0); -fx-font-weight: bold;");
+
+	    Button startButton = new Button("▶ Play");
+	    Button menuExitButton = new Button("❌ Exit");
+
+	    startButton.setStyle("-fx-font-size: 20px; -fx-background-color: lightgreen;");
+	    menuExitButton.setStyle("-fx-font-size: 20px; -fx-background-color: lightcoral;");
+
+	    startButton.setOnAction(e -> {
+	    	primaryStage.show();;
+	    	menuStage.close();});
+	    menuExitButton.setOnAction(e -> {
+	    	primaryStage.close();
+	    	menuStage.close();});
+	    
+	    BackgroundImage menuBackground = new BackgroundImage(
+	    		menuBackGroundImage,
+	            BackgroundRepeat.NO_REPEAT,
+	            BackgroundRepeat.NO_REPEAT,
+	            BackgroundPosition.CENTER,
+	            new BackgroundSize(BackgroundSize.AUTO, BackgroundSize.AUTO, false, false, true, true)
+	        );	    	    
+
+	    VBox layout = new VBox(20);
+	    layout.setBackground(new Background(menuBackground));
+	    layout.getChildren().addAll(menuLabel, startButton, menuExitButton);
+	    layout.setAlignment(Pos.CENTER);
+	    //layout.setStyle("-fx-background-color: navy; -fx-padding: 30px;");
+	    
+
+	    Scene menuScene = new Scene(layout, 1000, 600);
+	    menuStage.setScene(menuScene);
+	    menuStage.setResizable(false);
+	    menuStage.show();
+		HBox.setHgrow(hbox, Priority.NEVER);
 	}
 	
 	private void handleGuess(Character guessed, Stage primaryStage) {
