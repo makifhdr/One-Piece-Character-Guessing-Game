@@ -18,6 +18,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.ScrollPane;
@@ -105,7 +106,7 @@ public class Main extends Application {
         	String userInput = suggestionListView.getSelectionModel().getSelectedItem();
             if (userInput != null) {
                 Character guessedCharacter = characterMap.get(userInput);
-                handleGuess(guessedCharacter,targetCharacter);                
+                handleGuess(guessedCharacter,targetCharacter, primaryStage);                
                 suggestions.remove(userInput);
                 List<String> filtered = suggestions.stream()
                         .filter(name -> name.toLowerCase().contains(inputField.getText().toLowerCase()))
@@ -122,17 +123,17 @@ public class Main extends Application {
         grid = new GridPane();
         grid.setHgap(10);
         grid.setVgap(10);
+        
+        String[] headers = {
+        	    "Character", "Gender", "Affiliation", "Devil Fruit Type",
+        	    "Haki", "Bounty", "Height", "Origin", "First Arc"
+        	};
 
-        // Başlık
-        grid.add(new Label("Character"), 0, 0);
-        grid.add(new Label("Gender"), 1, 0);
-        grid.add(new Label("Affiliation"), 2, 0);
-        grid.add(new Label("Devil Fruit Type"), 3, 0);
-        grid.add(new Label("Haki"), 4, 0);
-        grid.add(new Label("Bounty"), 5, 0);
-        grid.add(new Label("Height"), 6, 0);
-        grid.add(new Label("Origin"), 7, 0);
-        grid.add(new Label("First Arc"), 8, 0);
+        	for (int i = 0; i < headers.length; i++) {
+        	    Label label = new Label(headers[i]);
+        	    label.setStyle("-fx-font-size: 20px; -fx-text-fill: white; -fx-effect: dropshadow(one-pass-box, black, 10, 0.0, 0, 0); -fx-font-weight: bold;");
+        	    grid.add(label, i, 0);
+        	}
         
         grid.setAlignment(Pos.TOP_CENTER);
         
@@ -161,10 +162,10 @@ public class Main extends Application {
         
 		Scene scene = new Scene(root,1500,1000);
 		primaryStage.setScene(scene);
-		primaryStage.show();		
+		primaryStage.show();
 	}
 	
-	private void handleGuess(Character guessed, Character correct) {
+	private void handleGuess(Character guessed, Character correct, Stage primaryStage) {
 		
         int newRow = grid.getRowCount();
         
@@ -182,8 +183,50 @@ public class Main extends Application {
         grid.add(createPropertyCellBounty(guessed.getBounty(), correct.getBounty()), 5, newRow);
         grid.add(createPropertyCellHeight(guessed.getHeight(), correct.getHeight()), 6, newRow);
         grid.add(createPropertyCell(guessed.getOrigin().toString(), correct.getOrigin().toString()), 7, newRow);
-        grid.add(createPropertyCellFirstArc(guessed.getFirstArc(), correct.getFirstArc()), 8, newRow);
+        grid.add(createPropertyCellFirstArc(guessed.getFirstArc(), correct.getFirstArc()), 8, newRow);        		
+        
+        if(guessed.equals(correct))
+        	showWinPage(primaryStage);
     }
+	
+	private void showWinPage(Stage primaryStage) {
+		Stage winStage = new Stage();
+		
+	    // Title
+	    Label winLabel = new Label("🎉 YOU WIN! 🎉");
+	    winLabel.setStyle("-fx-font-size: 40px; -fx-text-fill: gold; -fx-font-weight: bold;");
+
+	    // Buttons
+	    Button restartButton = new Button("🔁 Restart");
+	    Button exitButton = new Button("❌ Exit");
+
+	    restartButton.setStyle("-fx-font-size: 20px; -fx-background-color: lightgreen;");
+	    exitButton.setStyle("-fx-font-size: 20px; -fx-background-color: lightcoral;");
+
+	    // Button Actions
+	    restartButton.setOnAction(e -> {
+	    	restartGame(primaryStage);
+	    	winStage.close();});
+	    exitButton.setOnAction(e -> {
+	    	primaryStage.close();
+	    	winStage.close();});
+
+	    VBox layout = new VBox(20, winLabel, restartButton, exitButton);
+	    layout.setAlignment(Pos.CENTER);
+	    layout.setStyle("-fx-background-color: navy; -fx-padding: 30px;");
+
+	    Scene winScene = new Scene(layout, 800, 600);
+	    winStage.setScene(winScene);
+	    winStage.show();
+	}
+
+	private void restartGame(Stage primaryStage) {
+		grid.getChildren().clear();
+		siralanmisArcList.clear();
+		suggestions.clear();
+	    suggestionListView.getItems().clear();
+	    start(primaryStage);
+	}
 	
 	private StackPane createPropertyCellHaki(Set<HakiType> guess, Set<HakiType> correct) {
 		StackPane cell = new StackPane();
@@ -192,11 +235,11 @@ public class Main extends Application {
         copy.retainAll(correct);
         
 	        if (guess.equals(correct)) {
-	            background.setFill(Color.LIGHTGREEN); // Doğruysa yeşil
+	            background.setFill(Color.LIGHTGREEN);
 	        }else if(!copy.isEmpty()) {
 	        	background.setFill(Color.YELLOW);
 	        }else {
-	            background.setFill(Color.INDIANRED); // Yanlışsa kırmızı
+	            background.setFill(Color.INDIANRED);
 	        }
 	        
 	    String guessString = guess.toString();
@@ -216,9 +259,9 @@ public class Main extends Application {
         Rectangle background = new Rectangle(140, 100);
         
 	        if (guess.equals(correct)) {
-	            background.setFill(Color.LIGHTGREEN); // Doğruysa yeşil
+	            background.setFill(Color.LIGHTGREEN);
 	        } else {
-	            background.setFill(Color.INDIANRED); // Yanlışsa kırmızı
+	            background.setFill(Color.INDIANRED);
 	        }
         
         while(guess.contains(String.valueOf(' '))) {
@@ -245,12 +288,12 @@ public class Main extends Application {
     	ImageView upArrowImageView = new ImageView();
     	upArrowImageView.setFitWidth(80);
     	upArrowImageView.setFitHeight(80);
-    	upArrowImageView.setOpacity(0.3); // Make the arrow semi-transparent
+    	upArrowImageView.setOpacity(0.3);
     	
     	ImageView downArrowImageView = new ImageView();
     	downArrowImageView.setFitWidth(80);
     	downArrowImageView.setFitHeight(80);
-    	downArrowImageView.setOpacity(0.3); // Make the arrow semi-transparent
+    	downArrowImageView.setOpacity(0.3);
 
 
             if (guess == correct) {
@@ -268,7 +311,7 @@ public class Main extends Application {
         }
         Label text = new Label(guessArc);       
         text.setFont(Font.font("Georgia", FontWeight.BOLD, 16));
-        cell.getChildren().addAll(background, text, upArrowImageView, downArrowImageView);
+        cell.getChildren().addAll(background, upArrowImageView, downArrowImageView, text);
         return cell;
     }
 	
@@ -301,7 +344,7 @@ public class Main extends Application {
         String guessString = guess/100 + " meters " + "\n" + guess%100 + " cm";
         Label text = new Label(guessString);
         text.setFont(Font.font("Georgia", FontWeight.BOLD, 16));
-        cell.getChildren().addAll(background, text, upArrowImageView, downArrowImageView);
+        cell.getChildren().addAll(background, upArrowImageView, downArrowImageView, text);
         return cell;
     }
 	
@@ -334,7 +377,7 @@ public class Main extends Application {
 		String bountyString = formatter.format(guess);
         Label text = new Label(bountyString);
         text.setFont(Font.font("Georgia", FontWeight.BOLD, 16));
-        cell.getChildren().addAll(background, text, upArrowImageView, downArrowImageView);
+        cell.getChildren().addAll(background, upArrowImageView, downArrowImageView, text);
         return cell;
     }
 	
