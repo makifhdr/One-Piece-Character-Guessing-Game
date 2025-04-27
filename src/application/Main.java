@@ -54,6 +54,7 @@ public class Main extends Application {
 	Image downArrow = new Image(getClass().getResource("/resources/down-arrow.png").toExternalForm());
 	Image backgroundImage = new Image(getClass().getResource("/resources/one-piece-background2.jpg").toExternalForm());
 	Image menuBackGroundImage = new Image(getClass().getResource("/resources/one-piece-menu-background.jpg").toExternalForm());
+	boolean restarted = false;
 	
 	@Override
 	public void start(Stage primaryStage) {
@@ -182,43 +183,48 @@ public class Main extends Application {
 		primaryStage.setScene(scene);
 		primaryStage.setMaximized(true);
 		
-		Stage menuStage = new Stage();
-		
-	    Label menuLabel = new Label("    WELCOME TO ONE PIECE\nCHARACTER GUESSING GAME");
-	    menuLabel.setStyle("-fx-font-size: 40px; -fx-text-fill: white; -fx-effect: dropshadow(one-pass-box, black, 10, 0.0, 0, 0); -fx-font-weight: bold;");
+		if(!restarted) {
+			Stage menuStage = new Stage();
+			
+		    Label menuLabel = new Label("    WELCOME TO ONE PIECE\nCHARACTER GUESSING GAME");
+		    menuLabel.setStyle("-fx-font-size: 40px; -fx-text-fill: white; -fx-effect: dropshadow(one-pass-box, black, 10, 0.0, 0, 0); -fx-font-weight: bold;");
 
-	    Button startButton = new Button("▶ Play");
-	    Button menuExitButton = new Button("❌ Exit");
+		    Button startButton = new Button("▶ Play");
+		    Button menuExitButton = new Button("❌ Exit");
 
-	    startButton.setStyle("-fx-font-size: 20px; -fx-background-color: lightgreen;");
-	    menuExitButton.setStyle("-fx-font-size: 20px; -fx-background-color: lightcoral;");
+		    startButton.setStyle("-fx-font-size: 20px; -fx-background-color: lightgreen;");
+		    menuExitButton.setStyle("-fx-font-size: 20px; -fx-background-color: lightcoral;");
 
-	    startButton.setOnAction(e -> {
-	    	primaryStage.show();;
-	    	menuStage.close();});
-	    menuExitButton.setOnAction(e -> {
-	    	primaryStage.close();
-	    	menuStage.close();});
-	    
-	    BackgroundImage menuBackground = new BackgroundImage(
-	    		menuBackGroundImage,
-	            BackgroundRepeat.NO_REPEAT,
-	            BackgroundRepeat.NO_REPEAT,
-	            BackgroundPosition.CENTER,
-	            new BackgroundSize(BackgroundSize.AUTO, BackgroundSize.AUTO, false, false, true, true)
-	        );	    	    
+		    startButton.setOnAction(e -> {
+		    	primaryStage.show();
+		    	menuStage.close();});
+		    menuExitButton.setOnAction(e -> {
+		    	primaryStage.close();
+		    	menuStage.close();});
+		    
+		    BackgroundImage menuBackground = new BackgroundImage(
+		    		menuBackGroundImage,
+		            BackgroundRepeat.NO_REPEAT,
+		            BackgroundRepeat.NO_REPEAT,
+		            BackgroundPosition.CENTER,
+		            new BackgroundSize(BackgroundSize.AUTO, BackgroundSize.AUTO, false, false, true, true)
+		        );	    	    
 
-	    VBox layout = new VBox(20);
-	    layout.setBackground(new Background(menuBackground));
-	    layout.getChildren().addAll(menuLabel, startButton, menuExitButton);
-	    layout.setAlignment(Pos.CENTER);
-	    //layout.setStyle("-fx-background-color: navy; -fx-padding: 30px;");
-	    
+		    VBox layout = new VBox(20);
+		    layout.setBackground(new Background(menuBackground));
+		    layout.getChildren().addAll(menuLabel, startButton, menuExitButton);
+		    layout.setAlignment(Pos.CENTER);
+		    //layout.setStyle("-fx-background-color: navy; -fx-padding: 30px;");
+		    
 
-	    Scene menuScene = new Scene(layout, 1000, 600);
-	    menuStage.setScene(menuScene);
-	    menuStage.setResizable(false);
-	    menuStage.show();
+		    Scene menuScene = new Scene(layout, 1000, 600);
+		    menuStage.setScene(menuScene);
+		    menuStage.setResizable(false);
+		    menuStage.show();
+		}
+		else {
+			primaryStage.show();
+		}
 		HBox.setHgrow(hbox, Priority.NEVER);
 	}
 	
@@ -280,6 +286,7 @@ public class Main extends Application {
 	}
 
 	private void restartGame(Stage primaryStage) {
+		restarted = true;
 		grid.getChildren().clear();
 		siralanmisArcList.clear();
 		suggestions.clear();
