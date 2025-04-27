@@ -4,6 +4,6 @@ public enum DevilFruitType {
 	PARAMECIA,
 	LOGIA,
 	ZOAN,
-	ARTIFICAL,
+	ARTIFICIAL,
 	NONE
 }

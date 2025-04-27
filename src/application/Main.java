@@ -49,7 +49,7 @@ public class Main extends Application {
 	List<String> siralanmisArcList = new ArrayList<>();
 	private ObservableList<String> suggestions = FXCollections.observableArrayList();
     private ListView<String> suggestionListView = new ListView<>();
-	private Character targetCharacter; // Hedef karakter
+	private Character targetCharacter;
 	Image upArrow = new Image(getClass().getResource("/resources/up-arrow.png").toExternalForm());
 	Image downArrow = new Image(getClass().getResource("/resources/down-arrow.png").toExternalForm());
 	Image backgroundImage = new Image(getClass().getResource("/resources/one-piece-background2.jpg").toExternalForm());
@@ -85,7 +85,6 @@ public class Main extends Application {
         TextField inputField = new TextField();
         inputField.setPromptText("Enter character name...");
         
-        // Suggestion list setup
         suggestionListView.setItems(FXCollections.observableArrayList());
         suggestionListView.setMaxHeight(200);
         suggestionListView.setVisible(false);
@@ -106,7 +105,7 @@ public class Main extends Application {
         	String userInput = suggestionListView.getSelectionModel().getSelectedItem();
             if (userInput != null) {
                 Character guessedCharacter = characterMap.get(userInput);
-                handleGuess(guessedCharacter,targetCharacter, primaryStage);                
+                handleGuess(guessedCharacter, primaryStage);                
                 suggestions.remove(userInput);
                 List<String> filtered = suggestions.stream()
                         .filter(name -> name.toLowerCase().contains(inputField.getText().toLowerCase()))
@@ -126,7 +125,7 @@ public class Main extends Application {
         
         String[] headers = {
         	    "Character", "Gender", "Affiliation", "Devil Fruit Type",
-        	    "Haki", "Bounty", "Height", "Origin", "First Arc"
+        	    "Haki", "Bounty", "Height", "Origin", "First Arc", "Status"
         	};
 
         	for (int i = 0; i < headers.length; i++) {
@@ -137,7 +136,6 @@ public class Main extends Application {
         
         grid.setAlignment(Pos.TOP_CENTER);
         
-     // Create BackgroundImage
         BackgroundImage background1 = new BackgroundImage(
             backgroundImage,
             BackgroundRepeat.NO_REPEAT,
@@ -147,14 +145,18 @@ public class Main extends Application {
         );
         
         ScrollPane scrollPane = new ScrollPane(grid);
-        scrollPane.setFitToWidth(true);  // Optional: make it stretch horizontally
+        scrollPane.setFitToWidth(true);
         VBox.setVgrow(scrollPane, Priority.ALWAYS);
         
-     // 3. Make ScrollPane and GridPane transparent
         scrollPane.setStyle("-fx-background: transparent; -fx-background-color: transparent;");
         grid.setStyle("-fx-background-color: transparent;");
         
-        HBox hbox = new HBox(9, inputField, vbox);
+        Button exitButton = new Button("❌ Exit");
+        exitButton.setOnAction(e -> 
+	    	primaryStage.close());
+        exitButton.setStyle("-fx-font-size: 20px; -fx-background-color: lightcoral;");
+        
+        HBox hbox = new HBox(9, inputField, vbox,exitButton);
         hbox.setAlignment(Pos.TOP_CENTER);
         
         root.setBackground(new Background(background1));
@@ -165,7 +167,7 @@ public class Main extends Application {
 		primaryStage.show();
 	}
 	
-	private void handleGuess(Character guessed, Character correct, Stage primaryStage) {
+	private void handleGuess(Character guessed, Stage primaryStage) {
 		
         int newRow = grid.getRowCount();
         
@@ -174,36 +176,37 @@ public class Main extends Application {
         while(characterName.contains(String.valueOf(' '))) {
         	characterName = characterName.substring(0, characterName.indexOf(' ')) + "\n" + characterName.substring(characterName.indexOf(' ') + 1);
         }
-
-        grid.add(new Label(characterName), 0, newRow);
-        grid.add(createPropertyCell(guessed.getGender().toString(), correct.getGender().toString()), 1, newRow);
-        grid.add(createPropertyCell(guessed.getAffiliation(), correct.getAffiliation()), 2, newRow);
-        grid.add(createPropertyCellDevilFruit(guessed.getDevilFruit().getType().toString(), correct.getDevilFruit().getType().toString()), 3, newRow);
-        grid.add(createPropertyCellHaki(guessed.getHakiTypes(), correct.getHakiTypes()), 4, newRow);
-        grid.add(createPropertyCellBounty(guessed.getBounty(), correct.getBounty()), 5, newRow);
-        grid.add(createPropertyCellHeight(guessed.getHeight(), correct.getHeight()), 6, newRow);
-        grid.add(createPropertyCell(guessed.getOrigin().toString(), correct.getOrigin().toString()), 7, newRow);
-        grid.add(createPropertyCellFirstArc(guessed.getFirstArc(), correct.getFirstArc()), 8, newRow);        		
         
-        if(guessed.equals(correct))
-        	showWinPage(primaryStage);
+        Label nameLabel = new Label(characterName);
+        nameLabel.setStyle("-fx-font-size: 20px; -fx-text-fill: white; -fx-effect: dropshadow(one-pass-box, black, 10, 0.0, 0, 0); -fx-font-weight: bold;");
+
+        grid.add(nameLabel, 0, newRow);
+        grid.add(createPropertyCell(guessed.getGender().toString(), targetCharacter.getGender().toString()), 1, newRow);
+        grid.add(createPropertyCell(guessed.getAffiliation(), targetCharacter.getAffiliation()), 2, newRow);
+        grid.add(createPropertyCell(guessed.getDevilFruit().getType().toString(), targetCharacter.getDevilFruit().getType().toString()), 3, newRow);
+        grid.add(createPropertyCellHaki(guessed.getHakiTypes(), targetCharacter.getHakiTypes()), 4, newRow);
+        grid.add(createPropertyCellBounty(guessed.getBounty(), targetCharacter.getBounty()), 5, newRow);
+        grid.add(createPropertyCellHeight(guessed.getHeight(), targetCharacter.getHeight()), 6, newRow);
+        grid.add(createPropertyCell(guessed.getOrigin().toString(), targetCharacter.getOrigin().toString()), 7, newRow);
+        grid.add(createPropertyCellFirstArc(guessed.getFirstArc(), targetCharacter.getFirstArc()), 8, newRow);
+        grid.add(createPropertyCellStatus(guessed.getStatus().toString(), targetCharacter.getStatus().toString()), 9, newRow);
+        
+        if(guessed.equals(targetCharacter))
+        	showWinPage(primaryStage, targetCharacter);
     }
 	
-	private void showWinPage(Stage primaryStage) {
+	private void showWinPage(Stage primaryStage, Character character) {
 		Stage winStage = new Stage();
 		
-	    // Title
-	    Label winLabel = new Label("🎉 YOU WIN! 🎉");
+	    Label winLabel = new Label("   🎉 YOU WIN! 🎉\nThe character was:\n   " + targetCharacter.getName());
 	    winLabel.setStyle("-fx-font-size: 40px; -fx-text-fill: gold; -fx-font-weight: bold;");
 
-	    // Buttons
 	    Button restartButton = new Button("🔁 Restart");
 	    Button exitButton = new Button("❌ Exit");
 
 	    restartButton.setStyle("-fx-font-size: 20px; -fx-background-color: lightgreen;");
 	    exitButton.setStyle("-fx-font-size: 20px; -fx-background-color: lightcoral;");
 
-	    // Button Actions
 	    restartButton.setOnAction(e -> {
 	    	restartGame(primaryStage);
 	    	winStage.close();});
@@ -228,6 +231,49 @@ public class Main extends Application {
 	    start(primaryStage);
 	}
 	
+	private StackPane createPropertyCell(String guess, String correct) {
+        StackPane cell = new StackPane();
+        Rectangle background = new Rectangle(140, 100);
+        
+        if (guess.equals(correct)) {
+            background.setFill(Color.LIGHTGREEN);
+        }else {
+            background.setFill(Color.INDIANRED);
+        }
+                
+        while(guess.contains(String.valueOf(' '))) {
+        	guess = guess.substring(0, guess.indexOf(' ')) + "\n" + guess.substring(guess.indexOf(' ') + 1);
+        }
+
+        Label text = new Label(guess);
+        text.setFont(Font.font("Georgia", FontWeight.BOLD, 16));
+        cell.getChildren().addAll(background, text);
+        return cell;
+    }
+	
+	private StackPane createPropertyCellStatus(String guess, String correct) {
+        StackPane cell = new StackPane();
+        Rectangle background = new Rectangle(140, 100);
+        
+        
+	    if (guess.equals(correct)) {
+	        background.setFill(Color.LIGHTGREEN);
+	    } else if (guess.equals(Status.UNKNOWN.toString())) {
+	        background.setFill(Color.GOLD);
+	    } else {
+	        background.setFill(Color.INDIANRED);
+	    }
+                
+        while(guess.contains(String.valueOf(' '))) {
+        	guess = guess.substring(0, guess.indexOf(' ')) + "\n" + guess.substring(guess.indexOf(' ') + 1);
+        }
+
+        Label text = new Label(guess);
+        text.setFont(Font.font("Georgia", FontWeight.BOLD, 16));
+        cell.getChildren().addAll(background, text);
+        return cell;
+    }
+	
 	private StackPane createPropertyCellHaki(Set<HakiType> guess, Set<HakiType> correct) {
 		StackPane cell = new StackPane();
         Rectangle background = new Rectangle(140, 100);
@@ -237,7 +283,7 @@ public class Main extends Application {
 	        if (guess.equals(correct)) {
 	            background.setFill(Color.LIGHTGREEN);
 	        }else if(!copy.isEmpty()) {
-	        	background.setFill(Color.YELLOW);
+	        	background.setFill(Color.GOLD);
 	        }else {
 	            background.setFill(Color.INDIANRED);
 	        }
@@ -254,31 +300,10 @@ public class Main extends Application {
         return cell;
     }
 	
-	private StackPane createPropertyCellDevilFruit(String guess, String correct) {
-		StackPane cell = new StackPane();
-        Rectangle background = new Rectangle(140, 100);
-        
-	        if (guess.equals(correct)) {
-	            background.setFill(Color.LIGHTGREEN);
-	        } else {
-	            background.setFill(Color.INDIANRED);
-	        }
-        
-        while(guess.contains(String.valueOf(' '))) {
-        	guess = guess.substring(0, guess.indexOf(' ')) + "\n" + guess.substring(guess.indexOf(' ') + 1);
-        }
-
-        Label text = new Label(guess);
-        text.setFont(Font.font("Georgia", FontWeight.BOLD, 16));
-        cell.getChildren().addAll(background, text);
-        return cell;
-    }
-	
 	private StackPane createPropertyCellFirstArc(String guessArc, String correctArc) {
         StackPane cell = new StackPane();
         Rectangle background = new Rectangle(140, 100);
-        
-        
+                
         int guess = 0;
         int correct = 0;
         
@@ -323,12 +348,12 @@ public class Main extends Application {
         ImageView upArrowImageView = new ImageView();
     	upArrowImageView.setFitWidth(80);
     	upArrowImageView.setFitHeight(80);
-    	upArrowImageView.setOpacity(0.3); // Make the arrow semi-transparent
+    	upArrowImageView.setOpacity(0.3);
     	
     	ImageView downArrowImageView = new ImageView();
     	downArrowImageView.setFitWidth(80);
     	downArrowImageView.setFitHeight(80);
-    	downArrowImageView.setOpacity(0.3); // Make the arrow semi-transparent
+    	downArrowImageView.setOpacity(0.3);
         
         if (guess == correct) {
             background.setFill(Color.LIGHTGREEN);
@@ -355,12 +380,12 @@ public class Main extends Application {
         ImageView upArrowImageView = new ImageView();
     	upArrowImageView.setFitWidth(80);
     	upArrowImageView.setFitHeight(80);
-    	upArrowImageView.setOpacity(0.3); // Make the arrow semi-transparent
+    	upArrowImageView.setOpacity(0.3);
     	
     	ImageView downArrowImageView = new ImageView();
     	downArrowImageView.setFitWidth(80);
     	downArrowImageView.setFitHeight(80);
-    	downArrowImageView.setOpacity(0.3); // Make the arrow semi-transparent
+    	downArrowImageView.setOpacity(0.3);
 
         if (guess == correct) {
             background.setFill(Color.LIGHTGREEN);
@@ -378,37 +403,6 @@ public class Main extends Application {
         Label text = new Label(bountyString);
         text.setFont(Font.font("Georgia", FontWeight.BOLD, 16));
         cell.getChildren().addAll(background, upArrowImageView, downArrowImageView, text);
-        return cell;
-    }
-	
-	private StackPane createPropertyCell(String guess, String correct) {
-        StackPane cell = new StackPane();
-        Rectangle background = new Rectangle(140, 100);
-        
-        if(guess.equals("MALE") || guess.equals("FEMALE")) {
-        	if (guess.equals(correct)) {
-                background.setFill(Color.LIGHTGREEN); // Doğruysa yeşil
-            }else {
-                background.setFill(Color.INDIANRED); // Yanlışsa kırmızı
-            }
-        }
-        else {
-	        if (guess.equals(correct)) {
-	            background.setFill(Color.LIGHTGREEN); // Doğruysa yeşil
-	        } else if (guess.contains(correct) || correct.contains(guess)) {
-	            background.setFill(Color.LIGHTYELLOW); // Kısmen doğruysa sarı
-	        } else {
-	            background.setFill(Color.INDIANRED); // Yanlışsa kırmızı
-	        }
-        }
-        
-        while(guess.contains(String.valueOf(' '))) {
-        	guess = guess.substring(0, guess.indexOf(' ')) + "\n" + guess.substring(guess.indexOf(' ') + 1);
-        }
-
-        Label text = new Label(guess);
-        text.setFont(Font.font("Georgia", FontWeight.BOLD, 16));
-        cell.getChildren().addAll(background, text);
         return cell;
     }
 	

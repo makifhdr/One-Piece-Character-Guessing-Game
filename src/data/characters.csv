@@ -74,7 +74,9 @@ Gecko Moria,MALE,Thriller Bark Pirates,Kage Kage no Mi,Shadow-Shadow Fruit,PARAM
 Gin,MALE,Krieg Pirates,None,None,NONE,NONE,12000000,186,EAST_BLUE,Baratie,21,44,ALIVE
 Gladius,MALE,Donquixote Pirates,Pamu Pamu no Mi,Pop-Pop Fruit,PARAMECIA,NONE,31000000,260,NORTH_BLUE,Punk Hazard,608,682,ALIVE
 Gol D. Roger,MALE,Roger Pirates,None,None,NONE,ARMAMENT|OBSERVATION|CONQUEROR,5564800000,274,EAST_BLUE,Romance Dawn,1,1,DEAD
+Hajrudin,MALE,New Giant Warrior Pirates,None,None,NONE,NONE,0,2200,GRAND_LINE,Dressrosa,639,706,ALIVE
 Hannyabal,MALE,Impel Down,None,None,NONE,NONE,0,309,SOUTH_BLUE,Impel Down,422,525,ALIVE
+Hibari,FEMALE,Marines,None,None,NONE,ARMAMENT|OBSERVATION,200000000,165,NORTH_BLUE,Egghead,1090,1061,ALIVE
 Hina,FEMALE,Marines,Ori Ori no Mi,Cage-Cage Fruit,PARAMECIA,NONE,200000000,181,WEST_BLUE,Arabasta,127,212,ALIVE
 Hody Jones,MALE,New Fish-Man Pirates,None,None,NONE,NONE,0,331,GRAND_LINE,Fish-Man Island,527,608,ALIVE
 Iceburg,MALE,Galley-La Company,None,None,NONE,NONE,0,199,GRAND_LINE,Water 7,230,323,ALIVE
@@ -98,7 +100,7 @@ King,MALE,Beasts Pirates,Ryu Ryu no Mi Model: Pteranodon,Dragon-Dragon Fruit Mod
 Koala,FEMALE,Revolutionary Army,None,None,NONE,NONE,0,160,UNKNOWN,Fish-Man Island,541,622,ALIVE
 Koby,MALE,Marines,None,None,NONE,ARMAMENT|OBSERVATION,500000000,167,EAST_BLUE,Romance Dawn,1,2,ALIVE
 Kouzuki Hiyori,FEMALE,Kouzuki Family,None,None,NONE,NONE,0,170,GRAND_LINE,Wano Country,892,909,ALIVE
-Kouzuki Momonosuke,MALE,Kouzuki Family,Uo Uo no Mi Model: Seiryu,Fish-Fish Fruit Model: Azure Dragon,ARTIFICAL,OBSERVATION,0,322,GRAND_LINE,Punk Hazard,609,684,ALIVE
+Kouzuki Momonosuke,MALE,Kouzuki Family,Uo Uo no Mi Model: Seiryu,Fish-Fish Fruit Model: Azure Dragon,ARTIFICIAL,OBSERVATION,0,322,GRAND_LINE,Punk Hazard,609,684,ALIVE
 Kouzuki Oden,MALE,Kouzuki Family,None,None,NONE,ARMAMENT|OBSERVATION|CONQUEROR,0,382,GRAND_LINE,Wano Country,910,920,DEAD
 Kouzuki Toki,FEMALE,Kouzuki Family,Toki Toki no Mi,Time-Time Fruit,PARAMECIA,NONE,0,190,UNKNOWN,Wano Country,893,919,DEAD
 Krieg,MALE,Krieg Pirates,None,None,NONE,NONE,17000000,243,EAST_BLUE,Baratie,21,45,ALIVE
@@ -159,10 +161,10 @@ Raizo,MALE,Kouzuki Family,Maki Maki no Mi,Scroll-Scroll Fruit,PARAMECIA,ARMAMENT
 Rebecca,FEMALE,Riku Family,None,None,NONE,OBSERVATION,0,171,GRAND_LINE,Dressrosa,633,704,ALIVE
 Rob Lucci,MALE,CP0,Neko Neko no Mi Model: Leopard,Cat-Cat Fruit Model: Leopard,ZOAN,ARMAMENT|OBSERVATION,0,212,GRAND_LINE,Water 7,230,323,ALIVE
 Roronoa Zoro,MALE,Straw Hat Pirates,None,None,NONE,ARMAMENT|OBSERVATION|CONQUEROR,1111000000,181,EAST_BLUE,Romance Dawn,1,3,ALIVE
-S-Bear,MALE,Special Science Group,Nikyu Nikyu no Mi,Paw-Paw Fruit,ARTIFICAL,ARMAMENT|OBSERVATION,0,660,GRAND_LINE,Egghead,1092,1062,ALIVE
-S-Hawk,MALE,Special Science Group,Supa Supa no Mi,Dice-Dice Fruit,ARTIFICAL,ARMAMENT|OBSERVATION,0,212,GRAND_LINE,Egghead,1087,1059,ALIVE
-S-Shark,MALE,Special Science Group,Sui Sui no Mi,Swim-Swim Fruit,ARTIFICAL,ARMAMENT|OBSERVATION,0,320,GRAND_LINE,Egghead,1094,1065,ALIVE
-S-Snake,FEMALE,Special Science Group,Mero Mero no Mi,Love-Love Fruit,ARTIFICAL,ARMAMENT|OBSERVATION,0,208,GRAND_LINE,Egghead,1087,1059,ALIVE
+S-Bear,MALE,Special Science Group,Nikyu Nikyu no Mi,Paw-Paw Fruit,ARTIFICIAL,ARMAMENT|OBSERVATION,0,660,GRAND_LINE,Egghead,1092,1062,ALIVE
+S-Hawk,MALE,Special Science Group,Supa Supa no Mi,Dice-Dice Fruit,ARTIFICIAL,ARMAMENT|OBSERVATION,0,212,GRAND_LINE,Egghead,1087,1059,ALIVE
+S-Shark,MALE,Special Science Group,Sui Sui no Mi,Swim-Swim Fruit,ARTIFICIAL,ARMAMENT|OBSERVATION,0,320,GRAND_LINE,Egghead,1094,1065,ALIVE
+S-Snake,FEMALE,Special Science Group,Mero Mero no Mi,Love-Love Fruit,ARTIFICIAL,ARMAMENT|OBSERVATION,0,208,GRAND_LINE,Egghead,1087,1059,ALIVE
 Sabo,MALE,Revolutionary Army,Mera Mera no Mi,Flame-Flame Fruit,LOGIA,ARMAMENT|OBSERVATION,602000000,187,EAST_BLUE,Post-War,494,583,ALIVE
 Sai,MALE,Chinjao Family,None,None,NONE,ARMAMENT|OBSERVATION,210000000,242,WEST_BLUE,Dressrosa,632,704,ALIVE
 Sakazuki Akainu,MALE,Marines,Magu Magu no Mi,Magma-Magma Fruit,LOGIA,ARMAMENT|OBSERVATION,5000000000,306,NORTH_BLUE,Enies Lobby,278,397,ALIVE
@@ -183,7 +185,7 @@ Shishilian,MALE,Mokomo Dukedom,None,None,NONE,NONE,0,196,GRAND_LINE,Zou,759,808,
 Silvers Rayleigh,MALE,Roger Pirates,None,None,NONE,ARMAMENT|OBSERVATION|CONQUEROR,0,188,UNKNOWN,Orange Town,8,19,ALIVE
 Smoker,MALE,Marines,Moku Moku no Mi,Smoke-Smoke Fruit,LOGIA,ARMAMENT|OBSERVATION,500000000,209,GRAND_LINE,Loguetown,48,97,ALIVE
 Spandam,MALE,CP0,None,None,NONE,NONE,0,192,GRAND_LINE,Water 7,249,355,ALIVE
-Speed,FEMALE,Beasts Pirates,Horse SMILE,Horse SMILE,ARTIFICAL,ARMAMENT,0,298,GRAND_LINE,Wano Country,904,917,ALIVE
+Speed,FEMALE,Beasts Pirates,Horse SMILE,Horse SMILE,ARTIFICIAL,ARMAMENT,0,298,GRAND_LINE,Wano Country,904,917,ALIVE
 Streusen,MALE,Big Mom Pirates,Kuku Kuku no Mi,Cook-Cook Fruit,PARAMECIA,NONE,0,140,GRAND_LINE,Whole Cake Island,827,858,ALIVE
 Stussy,FEMALE,CP0,Batto Batto no Mi,Bat-Bat Fruit,ZOAN,ARMAMENT|OBSERVATION,0,179,GRAND_LINE,Whole Cake Island,830,860,UNKNOWN
 Sugar,FEMALE,Donquixote Pirates,Hobi Hobi no Mi,Hobby-Hobby Fruit,PARAMECIA,NONE,0,110,NORTH_BLUE,Punk Hazard,608,682,ALIVE
