@@ -1,8 +1,66 @@
-.label-header {
+#label-header {
+	-fx-font-family: "Bangers";
     -fx-font-size: 20px;
     -fx-text-fill: white;
     -fx-effect: dropshadow(one-pass-box, black, 20, 0.0, 0, 0);
     -fx-font-weight: bold;
+}
+
+#menu-label{
+	-fx-font-size: 100px; 
+	-fx-text-fill: white; 
+	-fx-effect: dropshadow(one-pass-box, black, 10, 0.0, 0, 0); 
+	-fx-font-weight: bold;
+}
+
+#win-page{
+	-fx-font-size: 40px; 
+	-fx-text-fill: white; 
+	-fx-effect: dropshadow(one-pass-box, black, 10, 0.0, 0, 0); 
+	-fx-font-weight: bold;
+}
+
+#cell{
+	-fx-font-family: "Bangers";
+	-fx-font-size: 20px;
+    -fx-effect: dropshadow(one-pass-box, black, 20, 0.0, 0, 0);
+    -fx-font-weight: bold;
+}
+
+#play-button{
+	-fx-font-size: 20px; 
+	-fx-background-color: lightgreen; 
+	-fx-background-radius: 10;
+}
+
+#exit-button{
+	-fx-font-size: 20px; 
+	-fx-background-color: lightcoral;
+	-fx-background-radius: 10;
+}
+
+#give-up-button{
+	-fx-font-size: 20px; 
+	-fx-background-color: chartreuse; 
+	-fx-background-radius: 10;
+}
+
+#grid{
+	-fx-background: transparent; 
+}
+
+#scrollpane{
+	-fx-background: transparent; 
+	-fx-background-color: transparent;
+}
+
+#scrollpane .scroll-bar:vertical {
+    -fx-background-color: transparent;
+}
+
+#scrollpane .scroll-bar .thumb {
+    -fx-background-color: #ccc;
+    -fx-background-radius: 5;
 }
 
 #suggestionListView {

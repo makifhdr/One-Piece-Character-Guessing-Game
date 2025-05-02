@@ -31,7 +31,6 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
-import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
 
 
@@ -39,57 +38,47 @@ public class Main extends Application {
 	
 	private GridPane grid;
 	
+	boolean giveUp = false;
+	
 	Scene mainScene = new Scene(new StackPane());
 	
-	boolean restarted = false;
+	Button giveUpButton = new Button("Give up");
 	
 	DataController dataController = new DataController();
 	
 	List<Character> list = dataController.loadCharacters();
-	List<String> siralanmisArcList = dataController.getSiraliArcList();
+	List<String> orderedArcList = dataController.getSiraliArcList();
 	private Character targetCharacter;
 	Map<String, Character> characterMap = dataController.getCharacterMap(list);
 	
 	ObservableList<String> suggestions = FXCollections.observableArrayList();
     ListView<String> suggestionListView = new ListView<>();
+    TextField inputField = new TextField();
 	
 	ResourceLoader resourceLoader = new ResourceLoader();
 	Image backgroundImage = resourceLoader.getBackgroundImage();
 	Image menuBackGroundImage = resourceLoader.getMenuBackgroundImage();
-	Font bangersFont = resourceLoader.getBangersFont();
+	Image winBackgroundImage = resourceLoader.getWinBackgroundImage();
+	Image giveUpBackgroundImage = resourceLoader.getgiveUpBackgroundImage();
     
-    CreateCell createCell = new CreateCell(siralanmisArcList);
+    CreateCell createCell = new CreateCell(orderedArcList);
 	
 	@Override
 	public void start(Stage primaryStage) {
 	    
 	    targetCharacter = dataController.getRandomCharacter(list);
 		
-		suggestions.addAll(characterMap.values().stream()
-                .map(Character::getName)
-                .sorted()
-                .collect(Collectors.toList()));
-		suggestionListView.setId("suggestionListView");
+		suggestionListView = setSuggestionsListView(suggestionListView, primaryStage);
 		
 		VBox gameRoot = new VBox(10);
 		gameRoot.setPadding(new Insets(10));
-
-        TextField inputField = new TextField();
+        
         inputField.setScaleX(3);
         inputField.setScaleY(3);
         inputField.setMinWidth(270);
         inputField.setTranslateY(40);
         inputField.setPromptText("Enter character name...");
         inputField.setId("inputField");
-        
-        suggestionListView.setItems(FXCollections.observableArrayList());
-        suggestionListView.setStyle(STYLESHEET_CASPIAN);
-        suggestionListView.setScaleX(3);
-        suggestionListView.setScaleY(3);
-        suggestionListView.setTranslateY(-275);
-        suggestionListView.setMaxHeight(200);
-        suggestionListView.setMinWidth(270);
-        suggestionListView.setVisible(false);
         
         inputField.textProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue.isEmpty()) {
@@ -102,21 +91,6 @@ public class Main extends Application {
                 suggestionListView.setVisible(!filtered.isEmpty());
             }
         });
-
-        suggestionListView.setOnMouseClicked(event -> {
-        	String userInput = suggestionListView.getSelectionModel().getSelectedItem();
-            if (userInput != null) {
-                Character guessedCharacter = characterMap.get(userInput);
-                handleGuess(guessedCharacter, primaryStage);                
-                suggestions.remove(userInput);
-                List<String> filtered = suggestions.stream()
-                        .filter(name -> name.toLowerCase().contains(inputField.getText().toLowerCase()))
-                        .collect(Collectors.toList());
-                suggestionListView.setItems(FXCollections.observableArrayList(filtered));
-                suggestionListView.setVisible(false);
-                inputField.clear();
-            }
-        });
         
         VBox vbox = new VBox(5, inputField, suggestionListView);
         vbox.setPrefHeight(200);
@@ -127,17 +101,7 @@ public class Main extends Application {
         grid.setHgap(25);
         grid.setVgap(10);
         
-        String[] headers = {
-        	    "Character", "Gender", "Affiliation", "Devil Fruit Type",
-        	    "Haki", "Bounty", "Height", "Origin", "First Arc", "Status"
-        	};
-
-        	for (int i = 0; i < headers.length; i++) {
-        	    Label label = new Label(createCell.textFormatter(headers[i]));
-        	    label.setTextAlignment(TextAlignment.CENTER);
-        	    label.setStyle("-fx-font-size: 20px; -fx-text-fill: white; -fx-effect: dropshadow(one-pass-box, black, 20, 0.0, 0, 0); -fx-font-weight: bold;");
-        	    grid.add(label, i, 0);
-        	}
+        setHeaders();        
         
         grid.setAlignment(Pos.TOP_CENTER);
         
@@ -152,23 +116,33 @@ public class Main extends Application {
         ScrollPane scrollPane = new ScrollPane(grid);
         scrollPane.setFitToWidth(true);
         
-        scrollPane.setStyle("-fx-background: transparent; -fx-background-color: transparent;");
-        grid.setStyle("-fx-background-color: transparent;");
+        scrollPane.setId("scrollpane");
+        grid.setId("grid");
         
-        //mainScene.setRoot(gameRoot);
         mainScene.getStylesheets().add(resourceLoader.getStyleSheet("/resources/style.css"));
         
         Button menuButton = new Button(createCell.textFormatter("Go back to main menu"));
         menuButton.setOnAction(e ->{
     		showMenuPage(primaryStage, mainScene, gameRoot);
+    		inputField.setEditable(false);
         	});
-        menuButton.setStyle("-fx-font-size: 20px; -fx-background-color: lightcoral; -fx-background-radius: 10;");
+        menuButton.setId("exit-button");
         menuButton.setScaleX(2);
         menuButton.setScaleY(2);
         menuButton.setTranslateX(250);
         menuButton.setTranslateY(50);
         
-        HBox hbox = new HBox(9, vbox, menuButton);
+        giveUpButton.setOnAction(e -> {
+        	giveUp = true;
+        	handleGuess(targetCharacter, primaryStage);
+        });
+        giveUpButton.setId("give-up-button");
+        giveUpButton.setScaleX(2);
+        giveUpButton.setScaleY(2);
+        giveUpButton.setTranslateX(500);
+        giveUpButton.setTranslateY(100);
+        
+        HBox hbox = new HBox(9, vbox, menuButton, giveUpButton);
         hbox.setAlignment(Pos.TOP_CENTER);
         
         VBox.setVgrow(scrollPane, Priority.ALWAYS);
@@ -177,6 +151,56 @@ public class Main extends Application {
         
 		primaryStage.setMaximized(true);		
 		showMenuPage(primaryStage, mainScene, gameRoot);
+	}
+	
+	private void setHeaders() {
+        String[] headers = {
+        	    "Character", "Gender", "Affiliation", "Devil Fruit Type",
+        	    "Haki", "Bounty", "Height", "Origin", "First Arc", "Status"
+        	};
+
+        for (int i = 0; i < headers.length; i++) {
+        	Label label = new Label(createCell.textFormatter(headers[i]));
+        	label.setId("label-header");
+        	label.setTextAlignment(TextAlignment.CENTER);
+        	grid.add(label, i, 0);
+        }		
+	}
+	
+	private ListView<String> setSuggestionsListView(ListView<String> suggestionListView, Stage primaryStage){
+		
+		suggestions.addAll(characterMap.values().stream()
+                .map(Character::getName)
+                .sorted()
+                .collect(Collectors.toList()));
+		
+		suggestionListView.setId("suggestionListView");
+		suggestionListView.setItems(FXCollections.observableArrayList());
+        suggestionListView.setStyle(STYLESHEET_CASPIAN);
+        suggestionListView.setScaleX(3);
+        suggestionListView.setScaleY(3);
+        suggestionListView.setTranslateY(-275);
+        suggestionListView.setMaxHeight(200);
+        suggestionListView.setMinWidth(270);
+        suggestionListView.setVisible(false);
+		
+        suggestionListView.setOnMouseClicked(event -> {
+        	String userInput = suggestionListView.getSelectionModel().getSelectedItem();
+            if (userInput != null) {
+                Character guessedCharacter = characterMap.get(userInput);
+                handleGuess(guessedCharacter, primaryStage);                
+                suggestions.remove(userInput);
+                List<String> filtered = suggestions.stream()
+                        .filter(name -> name.toLowerCase().contains(inputField.getText().toLowerCase()))
+                        .collect(Collectors.toList());
+                suggestionListView.setItems(FXCollections.observableArrayList(filtered));
+                suggestionListView.setVisible(false);
+                inputField.clear();
+            }
+        });
+		
+		
+		return suggestionListView;
 	}
 	
 	private void handleGuess(Character guessed, Stage primaryStage) {
@@ -188,14 +212,14 @@ public class Main extends Application {
         characterName = createCell.textFormatter(characterName);
         
         StackPane cell = new StackPane();
+        cell.setId("cell");
         Rectangle background = new Rectangle(120, 75);
         background.setArcWidth(30);
         background.setArcHeight(30);
         background.setFill(Color.ANTIQUEWHITE);
         
         Label nameLabel = new Label(characterName);
-        nameLabel.setStyle("-fx-font-size: 15px; -fx-text-fill: white; -fx-effect: dropshadow(one-pass-box, black, 10, 0.0, 0, 0); -fx-font-weight: bold;");
-        nameLabel.setTextAlignment(TextAlignment.CENTER);
+        nameLabel.setId("label-header");
         cell.getChildren().addAll(background, nameLabel);
 
         grid.add(cell, 0, newRow);
@@ -208,17 +232,20 @@ public class Main extends Application {
         grid.add(createCell.createPropertyCell(guessed.getOrigin().toString(), targetCharacter.getOrigin().toString()), 7, newRow);
         grid.add(createCell.createPropertyCellFirstArc(guessed.getFirstArc(), targetCharacter.getFirstArc()), 8, newRow);
         grid.add(createCell.createPropertyCellStatus(guessed.getStatus().toString(), targetCharacter.getStatus().toString()), 9, newRow);
+
+        nameLabel.setTextAlignment(TextAlignment.CENTER);
         
         if(guessed.equals(targetCharacter)) {
-        	showWinPage(primaryStage, targetCharacter);
+        	showEndPage(targetCharacter, primaryStage);
         }
     }
 	
 	private void showMenuPage(Stage primaryStage, Scene mainScene, VBox gameRoot) {
 		StackPane menuRoot = new StackPane();
 		
-	    Label menuLabel = new Label("    WELCOME TO ONE PIECE\nCHARACTER GUESSING GAME");
-	    menuLabel.setStyle("-fx-font-size: 40px; -fx-text-fill: white; -fx-effect: dropshadow(one-pass-box, black, 10, 0.0, 0, 0); -fx-font-weight: bold;");
+	    Label menuLabel = new Label("GUESS THE\nONE PIECE CHARACTER");
+	    menuLabel.setTextAlignment(TextAlignment.CENTER);
+	    menuLabel.setId("menu-label");
 	    	    
 	    BackgroundImage menuBackground = new BackgroundImage(
 	    		menuBackGroundImage,
@@ -230,10 +257,16 @@ public class Main extends Application {
 	    VBox layout = new VBox(20);
 	    
 	    Button startButton = new Button("▶ Play");
-	    Button menuExitButton = new Button("❌ Exit");
+	    startButton.setScaleX(3);
+	    startButton.setScaleY(3);
 
-	    startButton.setStyle("-fx-font-size: 20px; -fx-background-color: lightgreen; -fx-background-radius: 10;");
-	    menuExitButton.setStyle("-fx-font-size: 20px; -fx-background-color: lightcoral; -fx-background-radius: 10;");
+	    Button menuExitButton = new Button("❌ Exit");
+	    menuExitButton.setScaleX(3);
+	    menuExitButton.setScaleY(3);
+	    menuExitButton.setTranslateY(70);
+
+	    startButton.setId("play-button");
+	    menuExitButton.setId("exit-button");
 
 	    startButton.setOnAction(e -> {
 	    	mainScene.setRoot(gameRoot);
@@ -254,43 +287,102 @@ public class Main extends Application {
 	    primaryStage.show();
 	}
 	
-	private void showWinPage(Stage primaryStage, Character character) {
-		Stage winStage = new Stage();
+	private void showEndPage(Character character, Stage primaryStage) {
+		Stage endStage = new Stage();
 		
-	    Label winLabel = new Label("🎉 YOU WIN! 🎉\nThe character was:\n   " + targetCharacter.getName());
-	    winLabel.setTextAlignment(TextAlignment.CENTER);
-	    winLabel.setStyle("-fx-font-size: 40px; -fx-text-fill: gold; -fx-font-weight: bold;");
+		Scene endScene = new Scene(new StackPane(), 800,600);
+		endScene.getStylesheets().add(resourceLoader.getStyleSheet("/resources/style.css"));
+		
+		giveUpButton.setDisable(true);
+		
+		if(!giveUp) {
+			
+		    Label winLabel = new Label("🎉 YOU WIN! 🎉\nThe character was:\n   " + targetCharacter.getName());
+		    winLabel.setTextAlignment(TextAlignment.CENTER);
+		    winLabel.setId("win-page");
+	
+		    Button restartButton = new Button("🔁 Restart");
+		    Button exitButton = new Button("❌ Close");
+	
+		    restartButton.setId("play-button");
+		    exitButton.setId("exit-button");
+		    
+		    restartButton.setOnAction(e -> {
+		    	restartGame(primaryStage);
+		    	endStage.close();
+			    giveUpButton.setDisable(false);
+		    	});
+		    exitButton.setOnAction(e -> {
+		    	primaryStage.close();
+		    	endStage.close();
+		    	});
+		    
+		    BackgroundImage winBackground = new BackgroundImage(
+		    		winBackgroundImage,
+		            BackgroundRepeat.NO_REPEAT,
+		            BackgroundRepeat.NO_REPEAT,
+		            BackgroundPosition.CENTER,
+		            new BackgroundSize(BackgroundSize.AUTO, BackgroundSize.AUTO, false, false, true, true)
+		        );
+	
+		    VBox layout = new VBox(20, winLabel, restartButton, exitButton);
+		    layout.setBackground(new Background(winBackground));
+		    layout.setAlignment(Pos.CENTER);
+	
+		    endScene.setRoot(layout);
+		    endStage.setScene(endScene);
+		    endStage.setResizable(false);
+		    endStage.show();
+		}
+		else {
+			
+		    Label giveUpLabel = new Label("The character was:\n   " + targetCharacter.getName());
+		    giveUpLabel.setTextAlignment(TextAlignment.CENTER);
+		    giveUpLabel.setId("win-page");
 
-	    Button restartButton = new Button("🔁 Restart");
-	    Button exitButton = new Button("❌ Exit");
+		    Button restartButton = new Button("🔁 Restart");
+		    Button exitButton = new Button("❌ Close");
 
-	    restartButton.setStyle("-fx-font-size: 20px; -fx-background-color: lightgreen;");
-	    exitButton.setStyle("-fx-font-size: 20px; -fx-background-color: lightcoral;");
+		    restartButton.setId("play-button");
+		    exitButton.setId("exit-button");
+		    
+		    restartButton.setOnAction(e -> {
+		    	restartGame(primaryStage);
+		    	endStage.close();
+			    giveUpButton.setDisable(false);
+		    	});
+		    exitButton.setOnAction(e -> {
+		    	primaryStage.close();
+		    	endStage.close();
+		    	});
+		    
+		    BackgroundImage giveUpBackground = new BackgroundImage(
+		    		giveUpBackgroundImage,
+		            BackgroundRepeat.NO_REPEAT,
+		            BackgroundRepeat.NO_REPEAT,
+		            BackgroundPosition.CENTER,
+		            new BackgroundSize(BackgroundSize.AUTO, BackgroundSize.AUTO, false, false, true, true)
+		        );
 
-	    restartButton.setOnAction(e -> {
-	    	restartGame(primaryStage);
-	    	winStage.close();});
-	    exitButton.setOnAction(e -> {
-	    	primaryStage.close();
-	    	winStage.close();});
+		    VBox layout = new VBox(20, giveUpLabel, restartButton, exitButton);
+		    layout.setBackground(new Background(giveUpBackground));
+		    layout.setAlignment(Pos.CENTER);
 
-	    VBox layout = new VBox(20, winLabel, restartButton, exitButton);
-	    layout.setAlignment(Pos.CENTER);
-	    layout.setStyle("-fx-background-color: navy; -fx-padding: 30px;");
-
-	    Scene winScene = new Scene(layout, 800, 600);
-	    winStage.setScene(winScene);
-	    winStage.setResizable(false);
-	    winStage.show();
+		    endScene.setRoot(layout);
+		    endStage.setScene(endScene);
+		    endStage.setResizable(false);
+		    endStage.show();
+		    giveUp = false;
+		}
 	}
 
 	private void restartGame(Stage primaryStage) {
-		restarted = true;
 		grid.getChildren().clear();
 		suggestions.clear();
 	    suggestionListView.getItems().clear();
-	    primaryStage.close();;
-	    start(primaryStage);
+	    targetCharacter = getRandomCharacter(list);
+	    suggestionListView = setSuggestionsListView(suggestionListView, primaryStage);
+	    setHeaders();
 	}
 	
 	private static final Random random = new Random();

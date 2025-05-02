@@ -37,7 +37,7 @@ Carrot,FEMALE,Mokomo Dukedom,None,None,NONE,NONE,0,161,GRAND_LINE,Zou,753,804,AL
 Catarina Devon,FEMALE,Blackbeard Pirates,Inu Inu no Mi Model: Kyuubi no Kitsune,Dog-Dog Fruit Model: Nine Tailed Fox,ZOAN,NONE,0,361,SOUTH_BLUE,Marineford,484,575,ALIVE
 Cavendish,MALE,Beautiful Pirates,None,None,NONE,ARMAMENT|OBSERVATION,330000000,208,GRAND_LINE,Dressrosa,632,704,ALIVE
 Chaka,MALE,Arabasta Kingdom,Inu Inu no Mi Model: Jackal,Dog-Dog Fruit Model: Jackal,ZOAN,NONE,0,213,GRAND_LINE,Arabasta,91,155,ALIVE
-Charlotte Brûlée,FEMALE,Big Mom Pirates,Mira Mira no Mi,Mirror-Mirror Fruit,PARAMECIA,NONE,0,350,GRAND_LINE,Whole Cake Island,791,831,ALIVE
+Charlotte Brulee,FEMALE,Big Mom Pirates,Mira Mira no Mi,Mirror-Mirror Fruit,PARAMECIA,NONE,0,350,GRAND_LINE,Whole Cake Island,791,831,ALIVE
 Charlotte Chiffon,FEMALE,Fire Tank Pirates,None,None,NONE,NONE,0,215,GRAND_LINE,Whole Cake Island,783,825,ALIVE
 Charlotte Cracker,MALE,Big Mom Pirates,Bisu Bisu no Mi,Biscuit-Biscuit Fruit,PARAMECIA,ARMAMENT|OBSERVATION,860000000,307,GRAND_LINE,Whole Cake Island,796,835,ALIVE
 Charlotte Daifuku,MALE,Big Mom Pirates,Hoya Hoya no Mi,Puff-Puff Fruit,PARAMECIA,ARMAMENT|OBSERVATION,300000000,489,GRAND_LINE,Whole Cake Island,826,861,ALIVE
@@ -209,7 +209,7 @@ Victoria Cindry,FEMALE,Thriller Bark Pirates,None,None,NONE,NONE,0,188,WEST_BLUE
 Vinsmoke Ichiji,MALE,Germa Kingdom,None,None,NONE,NONE,0,186,NORTH_BLUE,Whole Cake Island,787,828,ALIVE
 Vinsmoke Judge,MALE,Germa Kingdom,None,None,NONE,NONE,0,272,NORTH_BLUE,Whole Cake Island,793,832,ALIVE
 Vinsmoke Niji,MALE,Germa Kingdom,None,None,NONE,NONE,0,185,NORTH_BLUE,Whole Cake Island,787,828,ALIVE
-Vinsmoke Reiju,MALE,Germa Kingdom,None,None,NONE,NONE,0,173,NORTH_BLUE,Whole Cake Island,784,826,ALIVE
+Vinsmoke Reiju,FEMALE,Germa Kingdom,None,None,NONE,NONE,0,173,NORTH_BLUE,Whole Cake Island,784,826,ALIVE
 Vinsmoke Sanji,MALE,Straw Hat Pirates,None,None,NONE,ARMAMENT|OBSERVATION,1032000000,180,NORTH_BLUE,Baratie,20,43,ALIVE
 Vinsmoke Yonji,MALE,Germa Kingdom,None,None,NONE,NONE,0,194,NORTH_BLUE,Whole Cake Island,783,825,ALIVE
 Viola,FEMALE,Riku Family,Giro Giro no Mi,Glare-Glare Fruit,PARAMECIA,NONE,0,178,GRAND_LINE,Dressrosa,632,703,ALIVE
