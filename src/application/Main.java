@@ -124,7 +124,6 @@ public class Main extends Application {
         Button menuButton = new Button(createCell.textFormatter("Go back to main menu"));
         menuButton.setOnAction(e ->{
     		showMenuPage(primaryStage, mainScene, gameRoot);
-    		inputField.setEditable(false);
         	});
         menuButton.setId("exit-button");
         menuButton.setScaleX(2);
@@ -135,11 +134,12 @@ public class Main extends Application {
         giveUpButton.setOnAction(e -> {
         	giveUp = true;
         	handleGuess(targetCharacter, primaryStage);
+    		inputField.setEditable(false);
         });
         giveUpButton.setId("give-up-button");
         giveUpButton.setScaleX(2);
         giveUpButton.setScaleY(2);
-        giveUpButton.setTranslateX(500);
+        giveUpButton.setTranslateX(400);
         giveUpButton.setTranslateY(100);
         
         HBox hbox = new HBox(9, vbox, menuButton, giveUpButton);
@@ -296,6 +296,7 @@ public class Main extends Application {
 		giveUpButton.setDisable(true);
 		
 		if(!giveUp) {
+    		inputField.setEditable(false);
 			
 		    Label winLabel = new Label("🎉 YOU WIN! 🎉\nThe character was:\n   " + targetCharacter.getName());
 		    winLabel.setTextAlignment(TextAlignment.CENTER);
@@ -382,6 +383,7 @@ public class Main extends Application {
 	    suggestionListView.getItems().clear();
 	    targetCharacter = getRandomCharacter(list);
 	    suggestionListView = setSuggestionsListView(suggestionListView, primaryStage);
+	    inputField.setEditable(true);
 	    setHeaders();
 	}
 	
